@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Currency Rates</title>
+</head>
+<body>
+<h1>Currency Rates</h1>
+<select id="currencySelect">
+  <option value="USD">USD</option>
+  <option value="EUR">EUR</option>
+</select>
+<input type="date" id="dateInput" value="2023-10-02">
+<button id="getRatesButton">Get Rates</button>
+
+<div id="results"></div>
+
+<script>
+  async function fetchRates() {
+    const currency = document.getElementById('currencySelect').value;
+    const date = document.getElementById('dateInput').value;
+
+
+    const response = await fetch('http://localhost:8080/api/currencies/' + currency + '?date=' + date);
+
+    if (!response.ok) {
+      console.error('Network response was not ok', response.statusText);
+      return;
+    }
+
+    const rates = await response.json();
+
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = '';
+
+    // Исправлено: добавлены обратные кавычки
+    rates.forEach(rate => {
+      resultsDiv.innerHTML += '<p>' + rate.date + ': ' + rate.value + '</p>';
+    });
+  }
+
+  document.getElementById('getRatesButton').addEventListener('click', fetchRates);
+</script>
+</body>
+</html>
