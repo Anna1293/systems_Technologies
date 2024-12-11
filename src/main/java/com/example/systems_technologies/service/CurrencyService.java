@@ -12,10 +12,12 @@ import java.util.List;
 public class CurrencyService {
     @Autowired
     private CurrencyRepository currencyRepository;
+    private static final int DEFAULT_DAYS = 7;
+
 
 
     public List<Currency> getCurrencyRates(String code, LocalDate date) {
-        LocalDate startDate = date.minusDays(7); // волшебная цифра
+        LocalDate startDate = date.minusDays(DEFAULT_DAYS);
         return currencyRepository.findByCodeAndDateBetween(code, startDate, date);
     }
 }
